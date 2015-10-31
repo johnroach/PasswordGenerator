@@ -1,0 +1,26 @@
+{
+  "name": "passwordgenerator",
+  "version": "1.0.0",
+  "description": "This API is meant to generate cryptologically sound and human memorizable passwords.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JohnRoach/PasswordGenerator.git"
+  },
+  "keywords": [
+    "password",
+    "generate",
+    "node",
+    "crypto",
+    "safe"
+  ],
+  "author": "John Roach",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JohnRoach/PasswordGenerator/issues"
+  },
+  "homepage": "https://github.com/JohnRoach/PasswordGenerator#readme"
+}
