@@ -1,3 +1,3 @@
 # PasswordGenerator
 
-a [Sails](http://sailsjs.org) application
+A [Sails](http://sailsjs.org) application meant to generate cryptologically sound and human memorizable passwords.
