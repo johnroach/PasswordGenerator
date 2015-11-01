@@ -31,3 +31,7 @@ Start application in your local box simply run:
 Thank you for using my API.
 
 _Visit my website @ [johnroach.info](http://johnroach.info)_
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/JohnRoach/passwordgenerator/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
