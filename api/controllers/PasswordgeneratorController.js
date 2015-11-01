@@ -90,9 +90,19 @@ module.exports = {
 				 //wanted to add more complexity
 				 var firstOrLastRandomNumber = crypto.randomBytes(1);
 				 if (firstOrLastRandomNumber[0] % 2){
-				     password = dictionary[key] + " " + password;
+					 if (password != "") {
+					 	password = dictionary[key] + " " + password;
+					} else {
+						password = dictionary[key];
+					}
+
 				 } else {
-					 password = password + " " + dictionary[key] ;
+					 if (password != "" ) {
+					 	password = password + " " + dictionary[key] ;
+					} else {
+						password = dictionary[key];
+					}
+
 				 }
 			}
 			return password.trim();
