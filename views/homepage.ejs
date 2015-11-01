@@ -24,7 +24,7 @@
     <h1>Password Generator</h1>
     <div class="center-block">
         <div class="row">
-            <div class="clearfix col-md-6">
+            <div class="col-md-6">
                 <div class="alert alert-dismissible alert-danger" id="errorDiv">
                     <button type="button" class="close" data-dismiss="alert">×</button>
                     <p id="error"></p>
@@ -32,12 +32,17 @@
             </div>
         </div>
         <div class="row">
-            <div class="input-group col-md-6">
-                <input type="text" class="form-control" id="perfectPassword" placeholder="Your password will be generated here!" />
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" class="form-control js-password" id="perfectPassword" placeholder="Your password will be generated here!" />
+                    <span class="input-group-btn">
+                    <button type="button" class="btn btn-default js-copybtn"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span> Copy</button>
+                    </span>
+                </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6 clearfix">
+            <div class="col-md-6">
                 <div class="clearfix">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -105,4 +110,23 @@
 
         });
     }
+
+    var copyBtn = document.querySelector('.js-copybtn');
+    copyBtn.addEventListener('click', function(event) {
+      // Select the email link anchor text
+      var password = document.querySelector('.js-password');
+      var range = document.createRange();
+      range.selectNode(password);
+      window.getSelection().addRange(range);
+
+      try {
+        // Now that we've selected the anchor text, execute the copy command
+        var successful = document.execCommand('copy');
+        var msg = successful ? 'successful' : 'unsuccessful';
+      } catch(err) {
+        console.log('Oops, unable to copy');
+      }
+      window.getSelection().removeAllRanges();
+    });
+
 </script>
