@@ -25,7 +25,7 @@ module.exports = {
 			}
 
 			if (!validator.isInt(wordLimit, {min:1, max:1000})) {
-				errors.push("wordLimit must be a integer of minimum 1 and is required.");
+				errors.push("wordLimit must be a integer of minimum 1, maximum of 1000 and is required.");
 			}
 
 			if (errors.length > 0) {
