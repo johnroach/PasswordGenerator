@@ -1,40 +1,48 @@
 <nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#"><b>GeneratePassword.io</b></a>
-    </div>
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/"><b>GeneratePassword</b></a>
+      </div>
 
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
-        <li><a href="#">About</a></li>
-      </ul>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="/">Home <span class="sr-only">(current)</span></a></li>
+          <li><a href="/api">API</a></li>
+          <li><a href="/about">About</a></li>
+        </ul>
+      </div>
     </div>
-  </div>
 </nav>
-
 <div class="content">
     <div class="col-md-12">
     <h1>Password Generator</h1>
     <div class="center-block">
         <div class="row">
+            <div class="clearfix col-md-6">
+                <div class="alert alert-dismissible alert-danger" id="errorDiv">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    <p id="error"></p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="input-group col-md-6">
-              <input type="text" class="form-control" id="perfectPassword" placeholder="Your password will be generated here!">
-              <span class="input-group-btn">
-                <button class="btn btn-default glyphicon glyphicon-copy" type="button">  Copy</button>
-              </span>
+                <input type="text" class="form-control" id="perfectPassword" placeholder="Your password will be generated here!">
+                <span class="input-group-btn">
+                    <button class="btn btn-default glyphicon glyphicon-copy" type="button">  Copy</button>
+                </span>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6 clearfix">
                 <div class="clearfix">
-                    <form class="form-horizontal">
+                    <div class="form-horizontal">
                         <div class="form-group">
                             <br />
                             <button class="btn btn-success" type="button" onclick="return submitForm();">
@@ -70,7 +78,7 @@
                                 </fieldset>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -78,6 +86,9 @@
 </div>
 </div>
 <script>
+    $(function() {
+        $("#errorDiv").hide();
+    });
     function submitForm() {
         var url = "passwordgenerator/generator";
         var getValues = {
@@ -86,7 +97,15 @@
             allowSymbols : $("#allowSymbols").prop('checked')
         };
         $.get( url , getValues, function (data) {
-            $("#perfectPassword").val(data.generated_password);
+            if (typeof(data.generated_password) !== 'undefined') {
+                $("#errorDiv").hide();
+                $("#perfectPassword").val(data.generated_password);
+            } else {
+                var errors = data.errors;
+                $("#errorDiv").show();
+                $("#error").text(errors);
+            }
+
         });
     }
 </script>
