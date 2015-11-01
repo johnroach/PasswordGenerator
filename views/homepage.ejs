@@ -84,7 +84,7 @@
             wordLimit : $("#wordLimit").val(),
             allowNumbers : $("#allowNumbers").prop('checked'),
             allowSymbols : $("#allowSymbols").prop('checked')
-        }
+        };
         $.get( url , getValues, function (data) {
             $("#perfectPassword").val(data.generated_password);
         });
