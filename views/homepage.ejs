@@ -25,7 +25,7 @@
     <div class="center-block">
         <div class="row">
             <div class="input-group col-md-6">
-              <input type="text" class="form-control" placeholder="Your password will be generated here!">
+              <input type="text" class="form-control" id="perfectPassword" placeholder="Your password will be generated here!">
               <span class="input-group-btn">
                 <button class="btn btn-default glyphicon glyphicon-copy" type="button">  Copy</button>
               </span>
@@ -37,7 +37,7 @@
                     <form class="form-horizontal">
                         <div class="form-group">
                             <br />
-                            <button class="btn btn-success" type="submit">
+                            <button class="btn btn-success" type="button" onclick="return submitForm();">
                                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Generate Password
                             </button>
                         </div>
@@ -51,36 +51,21 @@
                                         <label>
                                             Word Limit
                                         </label>
-                                        <input type="text" name="keywords_other_option" value="6">
+                                        <input type="text" name="wordLimit" id="wordLimit" value="6" />
                                     </div>
                                 </fieldset>
                                 <fieldset>
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" checked>Allow Numbers
+                                            <input type="checkbox" name="allowNumbers" id="allowNumbers" checked />Allow Numbers
                                         </label>
                                     </div>
                                 </fieldset>
                                 <fieldset>
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" checked>Allow Uppercase
+                                            <input type="checkbox" name="allowSymbols" id="allowSymbols" checked>Allow Symbols
                                         </label>
-                                    </div>
-                                </fieldset>
-                                <fieldset>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" checked>Allow Symbols
-                                        </label>
-                                    </div>
-                                </fieldset>
-                                <fieldset>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="keywords">Character Limit
-                                        </label>
-                                        <input type="text" name="keywords_other_option" value="" placeholder="Limitless">
                                     </div>
                                 </fieldset>
                             </div>
@@ -92,5 +77,16 @@
     </div>
 </div>
 </div>
-</body>
-</html>
+<script>
+    function submitForm() {
+        var url = "passwordgenerator/generator";
+        var getValues = {
+            wordLimit : $("#wordLimit").val(),
+            allowNumbers : $("#allowNumbers").prop('checked'),
+            allowSymbols : $("#allowSymbols").prop('checked')
+        }
+        $.get( url , getValues, function (data) {
+            $("#perfectPassword").val(data.generated_password);
+        });
+    }
+</script>
