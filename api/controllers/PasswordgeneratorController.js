@@ -24,7 +24,7 @@ module.exports = {
 				errors.push("allowSymbols must be boolean and is required.");
 			}
 
-			if (!validator.isInt(wordLimit, {min:1, max:100})) {
+			if (!validator.isInt(wordLimit, {min:1, max:1000})) {
 				errors.push("wordLimit must be a integer of minimum 1 and is required.");
 			}
 
@@ -33,34 +33,9 @@ module.exports = {
 			}
 
 			var foundPerfectPassword = false;
-			var perfectPassword = "";
-			var basePasswordResult = "";
 
-			while (!foundPerfectPassword) {
-				basePasswordResult = sails.controllers.passwordgenerator.basePassword(validator.toInt(wordLimit));
-				foundPerfectPassword = true;
-				if (!validator.toBoolean(allowNumbers)) {
-					var regexSymbolAndChar = /^[A-Za-z-\s-!$%^&*()_+|~=`{}\[\]:";'<>?,@#.\/]+$/;
-					if(!regexSymbolAndChar.test(basePasswordResult)){
-						foundPerfectPassword = false;
-					} else {
-						foundPerfectPassword = true;
-					}
-				}
-
-				if (foundPerfectPassword && !validator.toBoolean(allowSymbols)) {
-					var regexNumberAndChar = /^[A-Za-z-\s-1234567890]+$/;
-					if(!regexNumberAndChar.test(basePasswordResult)){
-						foundPerfectPassword = false;
-					} else {
-						foundPerfectPassword = true;
-					}
-				}
-
-				if (foundPerfectPassword) {
-					perfectPassword = basePasswordResult;
-				}
-			}
+			var perfectPassword = sails.controllers.passwordgenerator.basePassword(validator.toInt(wordLimit),
+				validator.toBoolean(allowNumbers), validator.toBoolean(allowSymbols));
 
 			var password = {
 				"generated_password": perfectPassword
@@ -68,7 +43,7 @@ module.exports = {
 	    	return res.send(password);
 		},
 	basePassword:
-		function (wordLimit) {
+		function (wordLimit, allowNumbers, allowSymbols) {
 			var dictionary = require('../models/dictionary.json');
 			var crypto = require('crypto');
 
@@ -78,29 +53,56 @@ module.exports = {
         	var value = new Array(numberOfThrows);
             var len = dieSides.length;
 
-			var wordIndex;
-			var password = "";
+			var wordIndex,
+				password = "",
+				tempPassword;
 			for (wordIndex = 0; wordIndex < (wordLimit); wordIndex++) {
-				var rnd = crypto.randomBytes(numberOfThrows)
-				for (var i = 0; i < numberOfThrows; i++) {
-			          value[i] = dieSides[rnd[i] % len];
-			     };
-				 var key = value.join('');
+				var foundPerfectPassword = false;
+
+				while (!foundPerfectPassword) {
+					var rnd = crypto.randomBytes(numberOfThrows)
+					for (var i = 0; i < numberOfThrows; i++) {
+				          value[i] = dieSides[rnd[i] % len];
+				     };
+
+					 var key = value.join('');
+					 tempPassword = dictionary[key];
+					 foundPerfectPassword = true;
+
+					 if (!allowNumbers) {
+	 					var regexSymbolAndChar = /^[A-Za-z-\s-!$%^&*()_+|~=`{}\[\]:";'<>?,@#.\/]+$/;
+	 					if(!regexSymbolAndChar.test(tempPassword)){
+	 						foundPerfectPassword = false;
+	 					} else {
+	 						foundPerfectPassword = true;
+	 					}
+	 				}
+
+	 				if (foundPerfectPassword && !allowSymbols) {
+	 					var regexNumberAndChar = /^[A-Za-z-\s-1234567890]+$/;
+	 					if(!regexNumberAndChar.test(tempPassword)){
+	 						foundPerfectPassword = false;
+	 					} else {
+	 						foundPerfectPassword = true;
+	 					}
+	 				}
+
+				}
 
 				 //wanted to add more complexity
 				 var firstOrLastRandomNumber = crypto.randomBytes(1);
 				 if (firstOrLastRandomNumber[0] % 2){
 					 if (password != "") {
-					 	password = dictionary[key] + " " + password;
+					 	password = tempPassword + " " + password;
 					} else {
-						password = dictionary[key];
+						password = tempPassword;
 					}
 
 				 } else {
 					 if (password != "" ) {
-					 	password = password + " " + dictionary[key] ;
+					 	password = password + " " + tempPassword;
 					} else {
-						password = dictionary[key];
+						password = tempPassword;
 					}
 
 				 }
