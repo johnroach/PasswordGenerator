@@ -39,6 +39,6 @@
     "type": "git",
     "url": "git://github.com/jroach/PasswordGenerator.git"
   },
-  "author": "jroach",
+  "author": "John Roach",
   "license": "ISC"
 }
